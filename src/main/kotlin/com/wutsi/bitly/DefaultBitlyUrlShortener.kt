@@ -32,7 +32,7 @@ class DefaultBitlyUrlShortener(
                     {
                       "long_url": "$url"
                     }
-                """.trimIndent()
+                    """.trimIndent()
                 )
             )
             .build()

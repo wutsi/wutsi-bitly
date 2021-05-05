@@ -9,14 +9,14 @@
   <version>1.3.0</version>
 
   <properties>
-    <jacoco.threshold.line>0.90</jacoco.threshold.line>
-    <jacoco.threshold.class>0.90</jacoco.threshold.class>
+    <jacoco.threshold.line>0.89</jacoco.threshold.line>
+    <jacoco.threshold.class>0.89</jacoco.threshold.class>
 
 
     <!-- Library versions - in ALPHABETICAL ORDER-->
     <common-lang.version>2.4</common-lang.version>
 
-    <bitly-api-client.version>0.8.0</bitly-api-client.version>
+    <jackson.version>2.12.3</jackson.version>
     <junit.version>5.7.1</junit.version>
     <klint.version>0.41.0</klint.version>
     <kotlin.version>1.5.0</kotlin.version>
@@ -29,9 +29,10 @@
 
   <dependencies>
     <dependency>
-      <groupId>net.swisstech</groupId>
-      <artifactId>bitly-api-client</artifactId>
-      <version>${bitly-api-client.version}</version>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -87,14 +88,6 @@
       <url>https://maven.pkg.github.com/wutsi/wutsi-bitly</url>
     </repository>
   </distributionManagement>
-
-  <repositories>
-    <repository>
-      <id>central</id>
-      <name>bintray</name>
-      <url>http://jcenter.bintray.com</url>
-    </repository>
-  </repositories>
 
   <build>
     <sourceDirectory>src/main/kotlin</sourceDirectory>

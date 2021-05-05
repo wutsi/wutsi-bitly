@@ -1,25 +1,53 @@
 package com.wutsi.bitly
 
-import net.swisstech.bitly.BitlyClient
-import net.swisstech.bitly.model.Response
-import net.swisstech.bitly.model.v3.ShortenResponse
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpRequest.BodyPublishers
+import java.net.http.HttpResponse
 
-class DefaultBitlyUrlShortener(private val accessToken: String) : BitlyUrlShortener {
+class DefaultBitlyUrlShortener(
+    private val accessToken: String,
+    private val objectMapper: ObjectMapper = ObjectMapper()
+) : BitlyUrlShortener {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(DefaultBitlyUrlShortener::class.java)
+        private val ENDPOINT = "https://api-ssl.bitly.com/v4/shorten"
     }
 
-    override fun shorten(url: String): String {
-        val client = BitlyClient(accessToken)
-        val resp: Response<ShortenResponse> = client.shorten()
-            .setLongUrl(url)
-            .call()
+    private val client: HttpClient = HttpClient.newBuilder()
+        .version(HttpClient.Version.HTTP_1_1)
+        .build()
 
-        if (resp.status_code / 100 == 2)
-            return resp.data.url
-        else {
-            LOGGER.warn("Unable to shorten $url. Error=${resp.status_code} - ${resp.status_txt}")
+    override fun shorten(url: String): String {
+        val request = HttpRequest.newBuilder()
+            .uri(URI(ENDPOINT))
+            .header("Content-Type", "application/json")
+            .header("Authorization", "Bearer $accessToken")
+            .POST(
+                BodyPublishers.ofString(
+                    """
+                    {
+                      "long_url": "$url"
+                    }
+                """.trimIndent()
+                )
+            )
+            .build()
+
+        val response: HttpResponse<String> = client.send(request, HttpResponse.BodyHandlers.ofString())
+        try {
+            if (response.statusCode() / 100 == 2) {
+                val data = objectMapper.readValue(response.body(), Map::class.java)
+                return data["link"]!!.toString()
+            } else {
+                LOGGER.warn("Unable to shorten $url. Error=${response.statusCode()} - ${response.body()}")
+                return url
+            }
+        } catch (ex: Exception) {
+            LOGGER.warn("Unable to shorten $url.", ex)
             return url
         }
     }

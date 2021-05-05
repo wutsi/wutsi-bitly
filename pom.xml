@@ -88,6 +88,13 @@
     </repository>
   </distributionManagement>
 
+  <repositories>
+    <repository>
+      <id>central</id>
+      <name>bintray</name>
+      <url>http://jcenter.bintray.com</url>
+    </repository>
+  </repositories>
 
   <build>
     <sourceDirectory>src/main/kotlin</sourceDirectory>

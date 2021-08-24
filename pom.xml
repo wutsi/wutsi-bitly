@@ -4,7 +4,7 @@
 
   <groupId>com.wutsi.bitly</groupId>
   <artifactId>wutsi-bitly</artifactId>
-  <version>1.5.10-SNAPSHOT</version>
+  <version>1.5.10</version>
 
   <properties>
     <jacoco.threshold.line>0.89</jacoco.threshold.line>
@@ -81,7 +81,7 @@
 
   <scm>
     <developerConnection>scm:git:https://github.com/wutsi/wutsi-bitly.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>wutsi-bitly-1.5.10</tag>
   </scm>
   <distributionManagement>
     <repository>
